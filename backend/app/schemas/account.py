@@ -1,18 +1,24 @@
+# app/schemas/account.py
 from pydantic import BaseModel
+from typing import List, Optional
 from uuid import UUID
+from datetime import datetime
+from app.schemas.data_type import DataTypeResponse
 
-# Base schema for creating/updating an account
 class AccountBase(BaseModel):
     username: str
     service_name: str
 
-# Schema for creating an account (inherits Base)
 class AccountCreate(AccountBase):
-    pass  # no extra fields needed
+    pass
 
-# Schema for returning account data (includes ID)
 class AccountResponse(AccountBase):
     id: UUID
+    data_types: List[DataTypeResponse] = []
+    risk_score: Optional[int] = 0
+    is_active: Optional[bool] = True
+    last_active: Optional[datetime] = None # <-- optional, if you want to display it
 
-    class Config:
-        orm_mode = True
+    model_config = {
+        "from_attributes": True  # required for from_orm
+    }

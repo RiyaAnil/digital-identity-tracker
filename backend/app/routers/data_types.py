@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.data_type import DataType
@@ -29,6 +29,12 @@ def assign_data_types(payload: AssignDataTypes, db: Session = Depends(get_db)):
         return {"error": "Account not found"}
 
     data_types = db.query(DataType).filter(DataType.id.in_(payload.data_type_ids)).all()
-    account.data_types.extend(data_types)
+
+    # Avoid duplicates
+    existing_ids = {dt.id for dt in account.data_types}
+    for dt in data_types:
+        if dt.id not in existing_ids:
+            account.data_types.append(dt)
+
     db.commit()
     return {"message": "Data types assigned successfully"}

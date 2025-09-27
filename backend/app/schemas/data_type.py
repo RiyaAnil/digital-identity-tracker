@@ -11,9 +11,11 @@ class DataTypeCreate(DataTypeBase):
     pass
 
 class DataTypeResponse(DataTypeBase):
-    id: UUID   # use UUID not str
-    class Config:
-        orm_mode = True
+    id: UUID
+
+    model_config = {
+        "from_attributes": True  # <-- enable ORM conversion
+    }
 
 class AssignDataTypes(BaseModel):
     account_id: UUID
