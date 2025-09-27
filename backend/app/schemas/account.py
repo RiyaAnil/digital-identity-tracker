@@ -1,13 +1,17 @@
 from pydantic import BaseModel
 from uuid import UUID
 
+# Base schema for creating/updating an account
 class AccountBase(BaseModel):
-    email: str
+    username: str
+    service_name: str
 
+# Schema for creating an account (inherits Base)
 class AccountCreate(AccountBase):
-    password: str
+    pass  # no extra fields needed
 
-class Account(AccountBase):
+# Schema for returning account data (includes ID)
+class AccountResponse(AccountBase):
     id: UUID
 
     class Config:
