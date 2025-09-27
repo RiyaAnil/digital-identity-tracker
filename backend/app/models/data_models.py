@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Table
 from sqlalchemy.orm import relationship
-from database import Base  # import the Base from your DB setup
+from app.core.database import Base  # import the Base from your DB setup
 
 # association table for many-to-many
 account_data_association = Table(

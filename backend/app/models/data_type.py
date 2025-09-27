@@ -2,7 +2,7 @@ from sqlalchemy import Column, String, Integer, Table, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 import uuid
-from app.database import Base
+from app.core.database import Base
 
 account_data = Table(
     "account_data",

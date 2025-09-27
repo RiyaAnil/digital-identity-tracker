@@ -2,7 +2,7 @@ from sqlalchemy import Column, String
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 import uuid
-from app.database import Base
+from app.core.database import Base
 from app.models.data_type import account_data  # association table
 
 class Account(Base):

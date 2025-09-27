@@ -1,9 +1,10 @@
 from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
 from sqlalchemy import text  # <-- import this
+from app.api import accounts
 from app.models import account, data_type
-from app.routers import accounts, data_types
-from app.database import get_db
+from app.api import data_types
+from app.core.database import get_db
 
 app = FastAPI()
 
