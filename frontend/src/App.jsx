@@ -1,13 +1,8 @@
-import './App.css'
+// frontend/src/App.jsx
+import DataTypes from "./pages/DataTypesPage.jsx";
 
 function App() {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <h1 className="text-4xl font-bold text-red-600">
-        Hello Vite + React + Tailwind!
-      </h1>
-    </div>
-  )
+  return <DataTypes />;
 }
 
-export default App
+export default App;
