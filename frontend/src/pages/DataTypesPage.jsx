@@ -145,7 +145,7 @@ export default function DataTypesPage() {
                   return <span className="risk-high">{risk}</span>;
                 })()}
               </td>
-              <td>{acc.lastactive}</td>
+              <td>{acc.last_active ? new Date(acc.last_active).toLocaleString() : "-"}</td>
               <td>{acc.status ? "Active" : "Inactive"}</td>
               <td>
                 {assignedData
