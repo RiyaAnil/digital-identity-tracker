@@ -1,50 +1,66 @@
-/* General container */
+/* --------------------- Container --------------------- */
 .container {
-  max-width: 900px;
+  max-width: 950px;
   margin: 40px auto;
-  padding: 20px 30px;
+  padding: 30px 40px;
   background-color: #f7f8fa;
   border-radius: 12px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  overflow: visible;
 }
 
-/* Headings */
+/* --------------------- Headings --------------------- */
 h2 {
   margin-bottom: 20px;
   color: #1e293b;
   font-size: 1.8rem;
   border-bottom: 2px solid #e2e8f0;
-  padding-bottom: 5px;
+  padding-bottom: 6px;
 }
 
-/* Dropdown */
+/* --------------------- Dropdown --------------------- */
 select {
   padding: 8px 12px;
-  margin-right: 20px;
+  font-size: 16px;
+  border: 1px solid #ccc;
   border-radius: 6px;
-  border: 1px solid #cbd5e1;
-  background-color: #ffffff;
-  font-size: 1rem;
+  background-color: #fff; /* white background */
+  color: #000; /* black text */
+  min-width: 200px;
 }
 
-/* Checkboxes */
-label input[type="checkbox"] {
+option {
+  color: #000;
+  background-color: #fff;
+}
+select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* --------------------- Checkboxes --------------------- */
+.checkbox-group {
+  margin-top: 15px;
+}
+
+.checkbox-group label {
+  font-weight: 500;
+  margin-right: 20px;
+  cursor: pointer;
+}
+
+.checkbox-group input[type="checkbox"] {
   margin-right: 6px;
   transform: scale(1.2);
   cursor: pointer;
 }
 
-label {
-  font-weight: 500;
-  margin-right: 15px;
-  cursor: pointer;
-}
-
-/* Button */
+/* --------------------- Button --------------------- */
 button {
-  margin-top: 12px;
-  padding: 10px 20px;
+  margin-top: 15px;
+  padding: 10px 22px;
   background-color: #3b82f6;
   color: white;
   border: none;
@@ -58,25 +74,25 @@ button {
 button:hover {
   background-color: #2563eb;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* Feedback message */
-p {
+/* --------------------- Feedback Message --------------------- */
+p.message {
   margin-top: 12px;
   font-weight: bold;
   color: #065f46;
 }
 
-/* Table */
+/* --------------------- Table --------------------- */
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 25px;
+  margin-top: 30px;
   background-color: #ffffff;
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
 thead {
@@ -97,8 +113,8 @@ tbody tr:hover {
   background-color: #e0f2fe;
 }
 
-/* Data type badges */
-td span.badge {
+/* --------------------- Data Type Badges --------------------- */
+td .badge {
   display: inline-block;
   background-color: #fde68a;
   color: #92400e;
@@ -107,4 +123,29 @@ td span.badge {
   margin-right: 6px;
   font-size: 0.85rem;
   font-weight: 500;
+}
+
+/* --------------------- Risk Score Badges --------------------- */
+td .risk-low {
+  background-color: #d1fae5;
+  color: #065f46;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+td .risk-medium {
+  background-color: #fef3c7;
+  color: #92400e;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+td .risk-high {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 6px;
 }
