@@ -6,6 +6,11 @@ export default function RiskTable({ riskScores }) {
     return "risk-high";
   };
 
+  const formatDate = (dateStr) => {
+    if (!dateStr) return "-";
+    return new Date(dateStr).toLocaleString();
+  };
+
   return (
     <table>
       <thead>
@@ -23,7 +28,7 @@ export default function RiskTable({ riskScores }) {
             <td>{r.username}</td>
             <td>{r.service}</td>
             <td className={getRiskClass(r.risk_score)}>{r.risk_score}</td>
-            <td>{r.last_active}</td>
+            <td>{formatDate(r.last_active)}</td>
             <td>{r.active ? "Yes" : "No"}</td>
           </tr>
         ))}

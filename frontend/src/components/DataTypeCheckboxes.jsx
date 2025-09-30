@@ -10,12 +10,15 @@ export default function DataTypeCheckboxes({ dataTypes, selected, onChange }) {
               type="checkbox"
               value={dt.id}
               checked={selected.includes(dt.id)}
-              onChange={(e) => {
-                if (e.target.checked) onChange([...selected, dt.id]);
-                else onChange(selected.filter((id) => id !== dt.id));
+              onChange={() => {
+                if (selected.includes(dt.id)) {
+                  onChange(selected.filter((id) => id !== dt.id));
+                } else {
+                  onChange([...selected, dt.id]);
+                }
               }}
             />
-            {dt.name}
+            {dt.type_name}
           </label>
         ))}
       </div>

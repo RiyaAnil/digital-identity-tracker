@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from app.database import get_db
+from app.core.database import get_db
 from app.models.data_type import DataType
 from app.models.account import Account
 from app.schemas.data_type import DataTypeCreate, DataTypeResponse, AssignDataTypes

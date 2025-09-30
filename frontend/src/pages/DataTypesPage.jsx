@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import supabase from "../supabaseClient";
+import { fetchAccounts, fetchDataTypes, assignDataTypes } from "../api";
 import "../styles/styles.css";
 
 export default function DataTypesPage() {
@@ -7,80 +7,58 @@ export default function DataTypesPage() {
   const [selectedTypes, setSelectedTypes] = useState([]);
   const [accounts, setAccounts] = useState([]);
   const [dataTypes, setDataTypes] = useState([]);
-  const [assignedData, setAssignedData] = useState([]);
   const [message, setMessage] = useState("");
 
+  // Load accounts and data types from backend
   useEffect(() => {
-    const fetchData = async () => {
+    const loadData = async () => {
       try {
-        const { data: accountsData, error: accErr } = await supabase
-          .from("accounts")
-          .select("*");
-        if (accErr) throw accErr;
-        setAccounts(accountsData);
+        const accRes = await fetchAccounts();
+        setAccounts(accRes.data);
 
-        const { data: typesData, error: typeErr } = await supabase
-          .from("data_types")
-          .select("*");
-        if (typeErr) throw typeErr;
-        setDataTypes(typesData);
-
-        const { data: assigned, error: assignErr } = await supabase
-          .from("account_data")
-          .select("account_id, data_types(id, type_name, sensitivity_weight)");
-        if (assignErr) throw assignErr;
-        setAssignedData(assigned || []);
+        const typeRes = await fetchDataTypes();
+        setDataTypes(typeRes.data);
       } catch (err) {
         console.error(err);
+       
       }
     };
-
-    fetchData();
+    loadData();
   }, []);
 
+  // Toggle data type selection
   const toggleType = (typeId) => {
     setSelectedTypes((prev) =>
-      prev.includes(typeId) ? prev.filter((id) => id !== typeId) : [...prev, typeId]
+      prev.includes(typeId)
+        ? prev.filter((id) => id !== typeId)
+        : [...prev, typeId]
     );
   };
 
+  // Assign selected data types to the selected account
   const handleAssign = async () => {
     if (!selectedAccount || selectedTypes.length === 0) {
       setMessage("⚠️ Please select an account and at least one data type.");
       return;
     }
 
-    const inserts = selectedTypes.map((typeId) => ({
-      account_id: selectedAccount,
-      data_type_id: typeId
-    }));
+    try {
+      await assignDataTypes({
+        account_id: selectedAccount,
+        data_type_ids: selectedTypes,
+      });
 
-    const { error } = await supabase
-      .from("account_data")
-      .upsert(inserts, { onConflict: ["account_id", "data_type_id"] });
-
-    if (error) {
-      console.error(error);
-      setMessage(`❌ Failed to assign data types: ${error.message}`);
-    } else {
-      setMessage(`✅ Assigned selected data types successfully.`);
+      setMessage("✅ Assigned selected data types successfully.");
       setSelectedAccount("");
       setSelectedTypes([]);
 
-      const { data: updatedAssigned } = await supabase
-        .from("account_data")
-        .select("account_id, data_types(id, type_name, sensitivity_weight)");
-      setAssignedData(updatedAssigned || []);
+      // Refresh accounts to get updated risk scores and data types
+      const accRes = await fetchAccounts();
+      setAccounts(accRes.data);
+    } catch (err) {
+      console.error(err);
+      setMessage(`❌ Failed: ${err.response?.data?.detail || err.message}`);
     }
-  };
-
-  const calculateRisk = (accountId) => {
-    const assigned = assignedData.filter((a) => a.account_id === accountId);
-    const sum = assigned.reduce(
-      (acc, cur) => acc + (cur.data_types?.sensitivity_weight || 0),
-      0
-    );
-    return Math.min(sum, 100); // cap risk at 100
   };
 
   return (
@@ -90,8 +68,11 @@ export default function DataTypesPage() {
       <div className="form-group">
         <div>
           <label>Choose Account: </label>
-          <select value={selectedAccount} onChange={(e) => setSelectedAccount(e.target.value)}>
-            <option value="" disabled>--Select an Account--</option>
+          <select
+            value={selectedAccount}
+            onChange={(e) => setSelectedAccount(e.target.value)}
+          >
+            <option value="">--Select an Account--</option>
             {accounts.map((acc) => (
               <option key={acc.id} value={acc.id}>
                 {acc.service_name} ({acc.username})
@@ -113,9 +94,9 @@ export default function DataTypesPage() {
           ))}
         </div>
 
-        <div>
-          <button className="assign-btn" onClick={handleAssign}>Assign</button>
-        </div>
+        <button className="assign-btn" onClick={handleAssign}>
+          Assign
+        </button>
       </div>
 
       {message && <p className="message">{message}</p>}
@@ -138,21 +119,30 @@ export default function DataTypesPage() {
               <td>{acc.username}</td>
               <td>{acc.service_name}</td>
               <td>
-                {(() => {
-                  const risk = calculateRisk(acc.id);
-                  if (risk < 40) return <span className="risk-low">{risk}</span>;
-                  if (risk < 70) return <span className="risk-medium">{risk}</span>;
-                  return <span className="risk-high">{risk}</span>;
-                })()}
+                <span
+                  className={
+                    acc.risk_score < 40
+                      ? "risk-low"
+                      : acc.risk_score < 70
+                      ? "risk-medium"
+                      : "risk-high"
+                  }
+                >
+                  {acc.risk_score}
+                </span>
               </td>
-              <td>{acc.last_active ? new Date(acc.last_active).toLocaleString() : "-"}</td>
-              <td>{acc.status ? "Active" : "Inactive"}</td>
               <td>
-                {assignedData
-                  .filter((a) => a.account_id === acc.id)
-                  .map((a) => (
-                    <span key={a.data_types.id} className="badge">{a.data_types.type_name}</span>
-                  ))}
+                {acc.last_active
+                  ? new Date(acc.last_active).toLocaleString()
+                  : "-"}
+              </td>
+              <td>{acc.is_active ? "Active" : "Inactive"}</td>
+              <td>
+                {acc.data_types?.map((dt) => (
+                  <span key={dt.id} className="badge">
+                    {dt.type_name}
+                  </span>
+                ))}
               </td>
             </tr>
           ))}

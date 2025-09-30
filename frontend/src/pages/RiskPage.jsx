@@ -1,20 +1,30 @@
-// File location: frontend/src/pages/RiskPage.jsx
 import { useState, useEffect } from "react";
-import { supabase } from "../supabaseClient";
+import { fetchAccounts } from "../api/"; // call backend
 import RiskTable from "../components/RiskTable";
 
 export default function RiskPage() {
   const [riskScores, setRiskScores] = useState([]);
 
   useEffect(() => {
-    fetchRiskScores();
+    const loadAccounts = async () => {
+      try {
+        const res = await fetchAccounts();
+        // Map backend response to RiskTable format
+        const formatted = res.data.map((acc) => ({
+          account_id: acc.id,
+          username: acc.username,
+          service: acc.service_name,
+          risk_score: acc.risk_score,
+          last_active: acc.last_active,
+          active: acc.is_active,
+        }));
+        setRiskScores(formatted);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    loadAccounts();
   }, []);
-
-  const fetchRiskScores = async () => {
-    const { data, error } = await supabase.from("risk_scores").select("*");
-    if (error) console.error(error);
-    else setRiskScores(data);
-  };
 
   return (
     <div style={{ padding: "20px" }}>
