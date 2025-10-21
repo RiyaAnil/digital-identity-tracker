@@ -1,4 +1,3 @@
-# app/schemas/account.py
 from pydantic import BaseModel
 from typing import List, Optional
 from uuid import UUID
@@ -12,13 +11,18 @@ class AccountBase(BaseModel):
 class AccountCreate(AccountBase):
     pass
 
+class AccountUpdate(BaseModel):
+    username: Optional[str] = None
+    service_name: Optional[str] = None
+    status: Optional[str] = None
+
 class AccountResponse(AccountBase):
     id: UUID
     data_types: List[DataTypeResponse] = []
     risk_score: Optional[int] = 0
     is_active: Optional[bool] = True
-    last_active: Optional[datetime] = None # <-- optional, if you want to display it
+    last_active: Optional[datetime] = None
 
     model_config = {
-        "from_attributes": True  # required for from_orm
+        "from_attributes": True
     }

@@ -1,4 +1,3 @@
-# app/schemas/data_type.py
 from pydantic import BaseModel
 from typing import List
 from uuid import UUID
@@ -14,7 +13,7 @@ class DataTypeResponse(DataTypeBase):
     id: UUID
 
     model_config = {
-        "from_attributes": True  # <-- enable ORM conversion
+        "from_attributes": True
     }
 
 class AssignDataTypes(BaseModel):
