@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from sqlalchemy import text  # <-- import this
 from app.models import account, data_type
-from app.routers import accounts, data_types
+from app.routers import accounts, data_types, reports
 from app.core.database import get_db
 
 app = FastAPI(title="Digital Identity Tracker")
@@ -28,6 +28,7 @@ app.add_middleware(
 # Register routers
 app.include_router(accounts.router)
 app.include_router(data_types.router)
+app.include_router(reports.router)
 
 @app.get("/")
 def read_root():
