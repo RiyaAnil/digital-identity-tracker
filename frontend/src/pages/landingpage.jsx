@@ -3,15 +3,24 @@ import "../styles/styles.css";
 
 export default function LandingPage() {
   const handleLogin = () => {
-    window.location.href = "/login"; // change path if your login route differs
+    window.location.href = "/login";
+  };
+
+  const handleRegister = () => {
+    window.location.href = "/register";
   };
 
   return (
     <div className="simple-landing">
-      <button className="login-btn" onClick={handleLogin}>
+      {/* Top corners */}
+      <button className="corner-btn top-left" onClick={handleRegister}>
+        Register
+      </button>
+      <button className="corner-btn top-right" onClick={handleLogin}>
         Login
       </button>
 
+      {/* Centered content */}
       <div className="center-content">
         <h1 className="landing-title">Digital Identity Tracker</h1>
         <p className="landing-tagline">
