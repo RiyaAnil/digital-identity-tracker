@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { fetchAccounts, fetchDataTypes, assignDataTypes } from "../api";
+import DownloadButton from "../components/DownloadButton";
 import "../styles/styles.css";
 
 export default function DataTypesPage() {
@@ -101,7 +102,11 @@ export default function DataTypesPage() {
 
       {message && <p className="message">{message}</p>}
 
-      <h2>Accounts & Risk Scores</h2>
+      <div className="section-header">
+        <h2>Accounts & Risk Scores</h2>
+        <DownloadButton />
+      </div>
+
       <table className="account-table">
         <thead>
           <tr>

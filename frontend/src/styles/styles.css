@@ -195,3 +195,110 @@ td .risk-high {
   font-weight: 500;
 }
 
+/* --------------------- Section Header --------------------- */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* makes title left, button right */
+  margin-top: 40px;
+  margin-bottom: 10px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.section-header h2 {
+  margin: 0; /* removes extra spacing */
+  border-bottom: none;
+}
+
+
+.download-container {
+  position: relative;
+  display: inline-block;
+}
+
+.download-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  margin: 0;
+}
+
+.download-btn:hover {
+  background-color: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.download-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.download-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 8px;
+  background-color: white;
+  border-radius: 8px;
+  z-index: 9999;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  z-index: 1000;
+  min-width: 180px;
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.download-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 16px;
+  background-color: white;
+  color: #1e293b;
+  border: none;
+  text-align: left;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  margin: 0;
+  
+}
+
+.download-option:hover {
+  background-color: #f1f5f9;
+  transform: none;
+  box-shadow: none;
+}
+
+.download-option:first-child {
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.download-option svg {
+  width: 16px;
+  height: 16px;
+  color: #64748b;
+}

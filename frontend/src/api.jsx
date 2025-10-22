@@ -14,5 +14,13 @@ export const fetchDataTypes = () => api.get("/data-types");
 export const createDataType = (data) => api.post("/data-types", data);
 export const assignDataTypes = (payload) => api.post("/data-types/assign", payload);
 
+// Reports
+export const downloadCSV = () => api.get("/reports/csv", { 
+    responseType: 'blob' 
+});
+
+export const downloadPDF = () => api.get("/reports/pdf", { 
+    responseType: 'blob' 
+});
 
 export default api;
