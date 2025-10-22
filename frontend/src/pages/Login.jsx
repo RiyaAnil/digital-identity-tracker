@@ -12,7 +12,7 @@ export default function Login() {
       setAuthToken(token);
       localStorage.setItem("token", token);
       alert("Logged in successfully!");
-      window.location.href = "/dashboard"; // ✅ Redirect to dashboard
+      window.location.href = "/accounts"; // ✅ Redirect to dashboard
     } catch (err) {
       console.error("Login error:", err);
       alert("Login failed. Check your credentials.");

@@ -1,13 +1,20 @@
-import React from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/styles.css";
 
 export default function LandingPage() {
+  const navigate = useNavigate();
+
   const handleLogin = () => {
+
     window.location.href = "/login";
   };
 
   const handleRegister = () => {
     window.location.href = "/register";
+
+    // Navigate to accounts page after login
+    navigate("/accounts");
+
   };
 
   return (

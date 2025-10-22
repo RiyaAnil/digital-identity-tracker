@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import api, { setAuthToken } from "../axios";
+import { useNavigate } from "react-router-dom";
+
 
 export default function Dashboard() {
   const [profile, setProfile] = useState(null);
-  const [error, setError] = useState(null);
+    const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -43,7 +46,14 @@ export default function Dashboard() {
     <div style={{ padding: "2rem" }}>
       <h1>Welcome, {profile.profile_name}</h1>
       <p>Profile ID: {profile.id}</p>
-      <p>User ID: {profile.user_id}</p>
-    </div>
+          <p>User ID: {profile.user_id}</p>
+          
+          <div style={{ marginTop: "2rem", textAlign: "center" }}>
+  <button onClick={() => navigate("/accounts")} className="btn-submit">
+    Go to Accounts Manager
+  </button>
+</div>
+      </div>
+      
   );
 }
