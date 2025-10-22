@@ -15,7 +15,7 @@ export default function LandingPage() {
       <div className="center-content">
         <h1 className="landing-title">Digital Identity Tracker</h1>
         <p className="landing-tagline">
-          One dashboard to track your digital identity and data risks.
+          Secure, Simplify and Streamline your accounts
         </p>
       </div>
     </div>
