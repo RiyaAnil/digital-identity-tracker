@@ -5,233 +5,210 @@
 <title>Digital Identity Report</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 <style>
-  * {
-    box-sizing: border-box;
-  }
+  
+  /* ===================== Global Reset ===================== */
+/* ===================== Global Reset ===================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-  body {
-    font-family: 'Space Grotesk', sans-serif;
-    background-color: #f5f1e8;
-    background-image: 
-      repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.03) 2px, rgba(0,0,0,.03) 4px);
-    margin: 0;
-    padding: 40px 20px 100px 20px;
-    color: #1a1a1a;
-    line-height: 1.5;
-  }
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #f8fafc, #e0f2fe);
+  color: #1e293b;
+  padding: 40px 20px 100px 20px;
+  line-height: 1.6;
+}
 
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    width: 100%;
-  }
+/* ===================== Container ===================== */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
 
+/* ===================== Header ===================== */
+header {
+  background-color: #ffffff;
+  padding: 32px;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0;
+  margin-bottom: 40px;
+}
+
+header h1 {
+  text-align: center;
+  font-size: 2.2rem;
+  color: #0f172a;
+  font-weight: 700;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+}
+
+.header-info {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  text-transform: uppercase;
+  font-size: 0.8rem; /* Reduced font size */
+  color: #64748b;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.header-info > div {
+  background: none;
+  border: none;
+  padding: 0;
+  box-shadow: none;
+}
+
+/* ===================== Report Card ===================== */
+.report-card {
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 0;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.report-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+}
+
+/* ===================== Table ===================== */
+.table-container {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+
+thead {
+  background-color: #3b82f6;
+  color: white;
+}
+
+th {
+  text-align: left;
+  padding: 16px 20px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  border-bottom: 2px solid #2563eb;
+}
+
+td {
+  padding: 14px 20px;
+  border-bottom: 1px solid #e2e8f0;
+  color: #1e293b;
+  background-color: #fff;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f8fafc;
+}
+
+tbody tr:hover {
+  background-color: #e0f2fe;
+  transition: background 0.2s ease;
+}
+
+/* ===================== Status Badges ===================== */
+.status-active,
+.status-inactive {
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 8px;
+  display: inline-block;
+  text-transform: uppercase;
+}
+
+.status-active {
+  background-color: #d1fae5;
+  color: #065f46;
+  border: 1px solid #34d399;
+}
+
+.status-inactive {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #f87171;
+}
+
+/* ===================== Risk Score ===================== */
+.risk-score {
+  display: inline-block;
+  background-color: #fef3c7;
+  color: #92400e;
+  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid #fcd34d;
+}
+
+/* ===================== Service Name ===================== */
+.service-name {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+/* ===================== Data Types ===================== */
+.data-types {
+  color: #475569;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* ===================== Footer ===================== */
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  padding: 18px;
+  background-color: #f8fafc;
+  color: #475569;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border-top: 1px solid #e2e8f0;
+  box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.05);
+  letter-spacing: 0.3px;
+}
+
+/* ===================== Responsive ===================== */
+@media (max-width: 768px) {
   header {
-    margin-bottom: 40px;
-    border: 4px solid #1a1a1a;
-    background-color: #fff;
-    padding: 32px;
-    box-shadow: 8px 8px 0 rgba(0,0,0,0.15);
-    position: relative;
-  }
-
-  header::before {
-    content: '';
-    position: absolute;
-    top: -8px;
-    left: -8px;
-    right: -8px;
-    bottom: -8px;
-    border: 2px solid #1a1a1a;
-    pointer-events: none;
+    padding: 24px;
   }
 
   header h1 {
-    font-family: 'Space Mono', monospace;
-    font-size: 36px;
-    font-weight: 700;
-    color: #1a1a1a;
-    margin: 0 0 20px 0;
-    text-transform: uppercase;
-    letter-spacing: -1px;
-    text-align: center;
+    font-size: 1.6rem;
+  }
+
+  th, td {
+    padding: 10px 12px;
+    font-size: 13px;
   }
 
   .header-info {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 16px;
-    font-family: 'Space Mono', monospace;
-    font-size: 14px;
-    color: #4a4a4a;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.75rem; /* Slightly smaller on small screens */
   }
+}
 
-  .header-info > div {
-    background-color: #ffd95a;
-    padding: 8px 16px;
-    border: 3px solid #1a1a1a;
-    font-weight: 700;
-  }
 
-  .report-card {
-    background-color: #fff;
-    border: 4px solid #1a1a1a;
-    padding: 0;
-    box-shadow: 12px 12px 0 rgba(0,0,0,0.15);
-    overflow: hidden;
-    position: relative;
-  }
-
-  .report-card::before {
-    content: '';
-    position: absolute;
-    top: -8px;
-    left: -8px;
-    right: -8px;
-    bottom: -8px;
-    border: 2px solid #1a1a1a;
-    pointer-events: none;
-  }
-
-  .table-container {
-    overflow-x: auto;
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-  }
-
-  th {
-    text-align: left;
-    padding: 20px 24px;
-    background-color: #1a1a1a;
-    color: #fff;
-    font-family: 'Space Mono', monospace;
-    font-weight: 700;
-    font-size: 13px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    border-bottom: 4px solid #1a1a1a;
-  }
-
-  td {
-    padding: 20px 24px;
-    color: #2a2a2a;
-    border-bottom: 2px solid #e5e5e5;
-  }
-
-  tbody tr {
-    transition: all 0.15s ease;
-  }
-
-  tbody tr:nth-child(odd) {
-    background-color: #fafafa;
-  }
-
-  tbody tr:hover {
-    background-color: #ffd95a;
-    transform: translateX(4px);
-  }
-
-  tbody tr:last-child td {
-    border-bottom: none;
-  }
-
-  .status-active {
-    background-color: #4ade80;
-    color: #1a1a1a;
-    font-family: 'Space Mono', monospace;
-    font-weight: 700;
-    font-size: 12px;
-    padding: 6px 12px;
-    border: 3px solid #1a1a1a;
-    text-align: center;
-    display: inline-block;
-    text-transform: uppercase;
-    box-shadow: 3px 3px 0 rgba(0,0,0,0.2);
-  }
-
-  .status-inactive {
-    background-color: #f87171;
-    color: #1a1a1a;
-    font-family: 'Space Mono', monospace;
-    font-weight: 700;
-    font-size: 12px;
-    padding: 6px 12px;
-    border: 3px solid #1a1a1a;
-    text-align: center;
-    display: inline-block;
-    text-transform: uppercase;
-    box-shadow: 3px 3px 0 rgba(0,0,0,0.2);
-  }
-
-  .data-types {
-    font-family: 'Space Mono', monospace;
-    font-size: 12px;
-    color: #6b6b6b;
-    line-height: 1.6;
-  }
-
-  .risk-score {
-    font-family: 'Space Mono', monospace;
-    font-weight: 700;
-    color: #1a1a1a;
-    background-color: #e5e5e5;
-    padding: 4px 8px;
-    border: 2px solid #1a1a1a;
-    display: inline-block;
-  }
-
-  .service-name {
-    font-weight: 700;
-    color: #1a1a1a;
-    font-size: 15px;
-  }
-
-  footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    text-align: center;
-    font-family: 'Space Mono', monospace;
-    font-size: 12px;
-    color: #6b6b6b;
-    padding: 20px;
-    border: 3px solid #1a1a1a;
-    border-left: none;
-    border-right: none;
-    border-bottom: none;
-    background-color: #fff;
-    box-shadow: 0 -6px 12px rgba(0,0,0,0.1);
-    z-index: 1000;
-  }
-
-  @media (max-width: 768px) {
-    body {
-      padding: 20px 12px;
-    }
-
-    header h1 {
-      font-size: 24px;
-    }
-
-    header {
-      padding: 20px;
-    }
-
-    th, td {
-      padding: 12px 16px;
-      font-size: 13px;
-    }
-
-    .header-info {
-      flex-direction: column;
-    }
-  }
 </style>
 </head>
 <body>
