@@ -1,8 +1,17 @@
 // frontend/src/App.jsx
-import DataTypes from "./pages/DataTypesPage.jsx";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import LandingPage from "./pages/LandingPage";
+import DataTypes from "./pages/DataTypesPage";
 
 function App() {
-  return <DataTypes />;
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/data-types" element={<DataTypes />} />
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;
