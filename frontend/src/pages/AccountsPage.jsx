@@ -4,14 +4,19 @@ import {
   createAccount,
   updateAccount,
   deleteAccount,
+  fetchDataTypes,
+  assignDataTypes,
 } from "../api";
+import DownloadButton from "../components/DownloadButton";
 import "../styles/accounts.css";
 
 export default function AccountsPage() {
   const [accounts, setAccounts] = useState([]);
+  const [dataTypes, setDataTypes] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [editingAccount, setEditingAccount] = useState(null);
   const [message, setMessage] = useState("");
+  const [selectedDataTypes, setSelectedDataTypes] = useState([]);
   
   const [formData, setFormData] = useState({
     username: "",
@@ -19,9 +24,9 @@ export default function AccountsPage() {
     profile_id: "",
   });
 
-  // Load accounts on mount
   useEffect(() => {
     loadAccounts();
+    loadDataTypes();
   }, []);
 
   const loadAccounts = async () => {
@@ -34,14 +39,22 @@ export default function AccountsPage() {
     }
   };
 
-  // Open modal for creating new account
+  const loadDataTypes = async () => {
+    try {
+      const res = await fetchDataTypes();
+      setDataTypes(res.data);
+    } catch (err) {
+      console.error("Error loading data types:", err);
+    }
+  };
+
   const handleCreate = () => {
     setEditingAccount(null);
     setFormData({ username: "", service_name: "", profile_id: "" });
+    setSelectedDataTypes([]);
     setShowModal(true);
   };
 
-  // Open modal for editing existing account
   const handleEdit = (account) => {
     setEditingAccount(account);
     setFormData({
@@ -49,38 +62,53 @@ export default function AccountsPage() {
       service_name: account.service_name,
       profile_id: account.profile_id || "",
     });
+    setSelectedDataTypes(account.data_types?.map(dt => dt.id) || []);
     setShowModal(true);
   };
 
-  // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Submit form (create or update)
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const toggleDataType = (typeId) => {
+    setSelectedDataTypes((prev) =>
+      prev.includes(typeId)
+        ? prev.filter((id) => id !== typeId)
+        : [...prev, typeId]
+    );
+  };
 
+  const handleSubmit = async () => {
     if (!formData.username || !formData.service_name) {
       setMessage("⚠️ Username and Service Name are required");
       return;
     }
 
     try {
+      let accountId;
+      
       if (editingAccount) {
-        // Update existing account
         await updateAccount(editingAccount.id, formData);
+        accountId = editingAccount.id;
         setMessage("✅ Account updated successfully");
       } else {
-        // Create new account
-        await createAccount(formData);
+        const response = await createAccount(formData);
+        accountId = response.data.id;
         setMessage("✅ Account created successfully");
+      }
+
+      if (selectedDataTypes.length > 0) {
+        await assignDataTypes({
+          account_id: accountId,
+          data_type_ids: selectedDataTypes,
+        });
       }
 
       setShowModal(false);
       loadAccounts();
       setFormData({ username: "", service_name: "", profile_id: "" });
+      setSelectedDataTypes([]);
     } catch (err) {
       console.error("Error saving account:", err);
       setMessage(
@@ -91,7 +119,6 @@ export default function AccountsPage() {
     }
   };
 
-  // Delete account with confirmation
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this account?")) {
       return;
@@ -115,9 +142,12 @@ export default function AccountsPage() {
     <div className="accounts-container">
       <div className="accounts-header">
         <h1>Account Management</h1>
-        <button className="btn-create" onClick={handleCreate}>
-          + New Account
-        </button>
+        <div style={{ display: "flex", gap: "10px" }}>
+          <DownloadButton />
+          <button className="btn-create" onClick={handleCreate}>
+            + New Account
+          </button>
+        </div>
       </div>
 
       {message && (
@@ -134,6 +164,7 @@ export default function AccountsPage() {
               <th>Service Name</th>
               <th>Profile ID</th>
               <th>Risk Score</th>
+              <th>Data Shared</th>
               <th>Status</th>
               <th>Last Active</th>
               <th>Actions</th>
@@ -142,7 +173,7 @@ export default function AccountsPage() {
           <tbody>
             {accounts.length === 0 ? (
               <tr>
-                <td colSpan="7" className="no-data">
+                <td colSpan="8" className="no-data">
                   No accounts found. Create your first account!
                 </td>
               </tr>
@@ -164,6 +195,16 @@ export default function AccountsPage() {
                     >
                       {acc.risk_score || 0}
                     </span>
+                  </td>
+                  <td>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: "4px" }}>
+                      {acc.data_types?.map((dt) => (
+                        <span key={dt.id} className="badge">
+                          {dt.type_name}
+                        </span>
+                      ))}
+                      {(!acc.data_types || acc.data_types.length === 0) && "-"}
+                    </div>
                   </td>
                   <td>
                     <span className={`status-badge ${acc.is_active ? "active" : "inactive"}`}>
@@ -198,60 +239,97 @@ export default function AccountsPage() {
         </table>
       </div>
 
-      {/* Modal for Create/Edit */}
       {showModal && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <h2>{editingAccount ? "Edit Account" : "Create New Account"}</h2>
-            <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label>Username *</label>
-                <input
-                  type="text"
-                  name="username"
-                  value={formData.username}
-                  onChange={handleInputChange}
-                  placeholder="Enter username"
-                  required
-                />
-              </div>
+            
+            <div className="form-group">
+              <label>Username *</label>
+              <input
+                type="text"
+                name="username"
+                value={formData.username}
+                onChange={handleInputChange}
+                placeholder="Enter username"
+              />
+            </div>
 
-              <div className="form-group">
-                <label>Service Name *</label>
-                <input
-                  type="text"
-                  name="service_name"
-                  value={formData.service_name}
-                  onChange={handleInputChange}
-                  placeholder="e.g., Google, Facebook, Twitter"
-                  required
-                />
-              </div>
+            <div className="form-group">
+              <label>Service Name *</label>
+              <input
+                type="text"
+                name="service_name"
+                value={formData.service_name}
+                onChange={handleInputChange}
+                placeholder="e.g., Google, Facebook, Twitter"
+              />
+            </div>
 
-              <div className="form-group">
-                <label>Profile ID (Optional)</label>
-                <input
-                  type="text"
-                  name="profile_id"
-                  value={formData.profile_id}
-                  onChange={handleInputChange}
-                  placeholder="Enter profile ID"
-                />
-              </div>
+            <div className="form-group">
+              <label>Profile ID (Optional)</label>
+              <input
+                type="text"
+                name="profile_id"
+                value={formData.profile_id}
+                onChange={handleInputChange}
+                placeholder="Enter profile ID"
+              />
+            </div>
 
-              <div className="modal-actions">
-                <button
-                  type="button"
-                  className="btn-cancel"
-                  onClick={() => setShowModal(false)}
-                >
-                  Cancel
-                </button>
-                <button type="submit" className="btn-submit">
-                  {editingAccount ? "Update" : "Create"}
-                </button>
+            <div className="form-group">
+              <label>Data Types (Optional)</label>
+              <div className="checkbox-group" style={{ 
+                display: "grid", 
+                gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))",
+                gap: "10px",
+                maxHeight: "200px",
+                overflowY: "auto",
+                padding: "10px",
+                border: "1px solid #ddd",
+                borderRadius: "4px",
+                backgroundColor: "#f9f9f9"
+              }}>
+                {dataTypes.map((dt) => (
+                  <label key={dt.id} className="checkbox-label" style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    cursor: "pointer"
+                  }}>
+                    <input
+                      type="checkbox"
+                      checked={selectedDataTypes.includes(dt.id)}
+                      onChange={() => toggleDataType(dt.id)}
+                      style={{ cursor: "pointer" }}
+                    />
+                    <span>{dt.type_name}</span>
+                  </label>
+                ))}
+                {dataTypes.length === 0 && (
+                  <span style={{ color: "#666", fontStyle: "italic" }}>
+                    No data types available
+                  </span>
+                )}
               </div>
-            </form>
+            </div>
+
+            <div className="modal-actions">
+              <button
+                type="button"
+                className="btn-cancel"
+                onClick={() => setShowModal(false)}
+              >
+                Cancel
+              </button>
+              <button 
+                type="button" 
+                className="btn-submit"
+                onClick={handleSubmit}
+              >
+                {editingAccount ? "Update" : "Create"}
+              </button>
+            </div>
           </div>
         </div>
       )}

@@ -1,21 +1,33 @@
+/* Remove default browser margin/padding */
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* Navbar spans full screen width */
 .navbar {
+  width: 100%;
   background-color: #1e293b;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
   z-index: 100;
+  margin: 0;              /* ensures no gap */
+  padding: 0;             /* ensures no gap */
 }
 
+/* Inner container for content (optional centering) */
 .nav-container {
   max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
+  margin: 0 auto;          /* centers inner content */
+  padding: 0 20px;         /* small spacing inside */
   display: flex;
   justify-content: space-between;
   align-items: center;
   height: 64px;
 }
 
+/* Logo and links */
 .nav-logo {
   color: white;
   font-size: 1.3rem;
@@ -60,6 +72,7 @@
   color: white;
 }
 
+/* Mobile view */
 @media (max-width: 768px) {
   .nav-container {
     flex-direction: column;
