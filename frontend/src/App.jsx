@@ -1,5 +1,5 @@
 // frontend/src/App.jsx
-import { HashRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LandingPage from "./pages/landingpage";
 import DataTypes from "./pages/DataTypesPage";
 
