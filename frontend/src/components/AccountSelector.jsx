@@ -1,4 +1,5 @@
 // src/components/AccountSelector.jsx
+//This component shows a dropdown menu of accounts. The user can select an account, and the selected account ID is sent back to the page to perform actions like assigning data types or viewing details.
 export default function AccountSelector({ accounts, selected, onChange }) {
   return (
     <div>

@@ -1,3 +1,5 @@
+//This page fetches all accounts from the backend and shows their risk scores and activity status in a table.
+
 import { useState, useEffect } from "react";
 import { fetchAccounts } from "../api/"; // call backend
 import RiskTable from "../components/RiskTable";

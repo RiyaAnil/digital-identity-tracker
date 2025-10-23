@@ -1,4 +1,5 @@
 // src/components/DataTypeCheckboxes.jsx
+//This component displays all available data types as checkboxes. Users can select one or multiple types, and the selected IDs are sent back to the page to update the account’s data types
 export default function DataTypeCheckboxes({ dataTypes, selected, onChange }) {
   return (
     <div style={{ marginTop: "10px" }}>
