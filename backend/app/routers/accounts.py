@@ -1,4 +1,6 @@
 # app/routers/accounts.py
+#This file defines all the API endpoints for accounts: creating, reading, updating, deleting, and fetching by profile. It also calculates risk score and active status dynamically so the frontend always sees up-to-date information.
+
 from uuid import UUID
 from datetime import datetime, timedelta
 from typing import List

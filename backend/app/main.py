@@ -1,3 +1,5 @@
+#This file initializes the backend, sets up middleware, connects all routers for accounts, data types, and reports, and provides test endpoints to check if the server and database are running
+
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session

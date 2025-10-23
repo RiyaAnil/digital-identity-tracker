@@ -1,3 +1,5 @@
+#sets up the database connection, creates tables for accounts and data types, and provides sessions for API endpoints to interact with the database safely. It also tests the connection on startup to make sure everything works.
+
 import os
 from sqlalchemy import create_engine, text
 from sqlalchemy.ext.declarative import declarative_base
