@@ -1,7 +1,8 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from fastapi.responses import StreamingResponse, FileResponse
 from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
+from typing import Optional
 from app.core.database import get_db
 from app.models.account import Account
 from app.services.report_service import generate_csv, generate_pdf
@@ -23,25 +24,41 @@ def process_account(account: Account):
     }
 
 @router.get("/csv")
-def get_csv_report(db: Session = Depends(get_db)):
-    username = "me@example.com"  # hardcoded for now
-    account = db.query(Account).filter(Account.username == username).first()
-    if not account:
-        return {"error": "Account not found"}
+def get_csv_report(
+    username: Optional[str] = Query(None, description="Filter by username. If not provided, returns all accounts"),
+    db: Session = Depends(get_db)
+):
+    query = db.query(Account)
+    
+    if username:
+        accounts = query.filter(Account.username == username).all()
+    else:
+        accounts = query.all()
+    
+    if not accounts:
+        return {"error": "No accounts found"}
 
-    processed = [process_account(account)]
+    processed = [process_account(account) for account in accounts]
     csv_data, filename = generate_csv(processed)
     response = StreamingResponse(iter([csv_data]), media_type="text/csv")
     response.headers["Content-Disposition"] = f"attachment; filename={filename}"
     return response
 
 @router.get("/pdf")
-def get_pdf_report(db: Session = Depends(get_db)):
-    username = "me@example.com"  # hardcoded for now
-    account = db.query(Account).filter(Account.username == username).first()
-    if not account:
-        return {"error": "Account not found"}
+def get_pdf_report(
+    username: Optional[str] = Query(None, description="Filter by username. If not provided, returns all accounts"),
+    db: Session = Depends(get_db)
+):
+    query = db.query(Account)
+    
+    if username:
+        accounts = query.filter(Account.username == username).all()
+    else:
+        accounts = query.all()
+    
+    if not accounts:
+        return {"error": "No accounts found"}
 
-    processed = [process_account(account)]
+    processed = [process_account(account) for account in accounts]
     file_path, filename = generate_pdf(processed)
     return FileResponse(file_path, filename=filename, media_type="application/pdf")
